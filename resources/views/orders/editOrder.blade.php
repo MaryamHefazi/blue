@@ -23,16 +23,22 @@
                     <div class="mb-3">
                         <label for="user_id" class="form-label">Customer</label>
                         <select class="form-control" name="user_id">
-                            <option value="{{$order->id}}">{{$order->custome_id}}</option>
+                            @foreach($users as $user)
+                            <option value="{{$order->id}}" {{$order->customer_id == $user->id ? 'selected':''}}>
+                                {{'['.$user->id.'] '.$user->firstName.' '.$user->lastName}}
+                            </option>
+                            @endforeach
                         </select>
                     </div>
 
                     <div class="mb-3">
                         <label for="products" class="form-label">Products</label>
-                        <select name="products[]" class="form-control">
-
-                                <option>SSSSOOOO</option>
-
+                        <select name="products[]" class="form-control" multiple>
+                            @foreach($products as $product)
+                                <option value="{{$product->id}}" {{in_array($product->id , $selectedProducts) ? 'selected':''}}>
+                                    {{$product->id.') '.$product->productName.' '.'['.$product->price.']'}}
+                                </option>
+                            @endforeach
                         </select>
                     </div>
 

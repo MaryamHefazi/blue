@@ -21,16 +21,18 @@ class ProductController extends Controller
 
     public function addProduct(ProductRequest $request)
     {
-
+        //1)create new product
         $product = Product::create($request->toArray());
-        $last_id = $product->id;
-        $last_product = Product::find($last_id);
+
+        //2)giv product's categories via relation function
         $categories = $request->categories;
-        foreach ($categories as $category) {
-            $last_product->categories()->attach($category);
+
+        //3)attaching categories for product
+        foreach ($categories as $category){
+            $product->categories()->attach($category);
         }
 
-        return redirect('/dashboard/productList');
+        return redirect()->route('productList');
     }
 
 
@@ -39,8 +41,6 @@ class ProductController extends Controller
 
         $product = Product::with('categories')->get();
         return view('products.productsList', ['products' => $product]);
-//        $pv = Product::find(1);
-//        return $pv->categories()->attach([1,2,5]);
     }
 
 
@@ -64,9 +64,13 @@ class ProductController extends Controller
 
     public function edit(ProductRequest $request, $id)
     {
-
         Product::find($id)->update($request->except(['_method', '_token']));
-        return redirect('/dashboard/productList');
+        $product = Product::find($id);
+        $categories = $request->categories;
+        foreach ($categories as $category){
+            $product->categories()->attach($category);
+        }
 
+        return redirect()->route('productList');
     }
 }

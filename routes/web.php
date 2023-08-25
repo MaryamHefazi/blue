@@ -69,5 +69,6 @@ Route::get('logout' , [UserController::class , 'logout'])->name('logout');
 Route::get('/email' , [\App\Http\Controllers\EmailController::class , 'sendEmail']);
 
 
+Route::get('ord' , [\App\Http\Controllers\CategoryController::class , 'test']);
 
 

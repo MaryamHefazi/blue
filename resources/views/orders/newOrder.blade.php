@@ -23,7 +23,7 @@
                         <label for="user_id" class="form-label">Customer</label>
                         <select class="form-control" name="customer_id">
                          @foreach($users as $user)
-                            <option value="{{$user->id}}">{{$user->firstName.' '.$user->lastName}}</option>
+                            <option value="{{$user->id}}">{{'['.$user->id.'] '.$user->firstName.' '.$user->lastName}}</option>
                          @endforeach
                         </select>
                     </div>
@@ -32,7 +32,7 @@
                         <label for="products" class="form-label">Products</label>
                         <select name="products[]" class="form-control" multiple>
                             @foreach($products as $product)
-                                <option value="{{$product->id}}">{{$product->productName.' ['.$product->price .']'}}</option>
+                                <option value="{{$product->id}}">{{$product->id.')'.$product->productName.' ['.$product->price .']'}}</option>
                             @endforeach
                         </select>
                     </div>
