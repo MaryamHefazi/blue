@@ -65,10 +65,3 @@ Route::get('logout' , [UserController::class , 'logout'])->name('logout');
 
 
 
-//EMAIL TESTING...
-Route::get('/email' , [\App\Http\Controllers\EmailController::class , 'sendEmail']);
-
-
-Route::get('ord' , [\App\Http\Controllers\CategoryController::class , 'test']);
-
-
