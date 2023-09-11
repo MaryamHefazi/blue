@@ -38,13 +38,14 @@ class OrderController extends Controller
 
     public function show($id)
     {
-        $order = Order::find($id)->get();
+        $order = Order::find($id);
         return response()->json($order);
     }
 
     public function update(OrderRequest $request , $id)
     {
-       $order = Order::find($id)->update($request->toArray());
+       $order = Order::find($id);
+       $order->update($request->toArray());
         return response()->json($order);
     }
 }

@@ -21,7 +21,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 
-Route::get('/customers' , [CustomerController::class , 'customerList']);
+Route::get('/customers/{customer?}' , [CustomerController::class , 'customerList']);
 Route::get('/customer/{customer}' , [CustomerController::class , 'show']);
 Route::post('/newCustomer' , [CustomerController::class , 'newCustomer']);
 Route::put('/updateCustomer/{customer}' , [CustomerController::class , 'update']);

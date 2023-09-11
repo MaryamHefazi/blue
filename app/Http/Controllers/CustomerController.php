@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UserRequest;
+use App\Http\Resources\CustomerResource;
 use App\Models\Customer;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -17,7 +18,7 @@ class CustomerController extends Controller
         return $customer;
     }
 
-    public function customerList(Request $request){
+    public function customerList(Request $request , Customer $customer = null){
 
         $query = Customer::query();
 
@@ -39,9 +40,14 @@ class CustomerController extends Controller
             }
         }
 
-        $users = $query->select('id', 'firstName', 'lastName', 'email', 'phoneNumber', 'city')->get();
+        $users = $query->with('orders:id,customer_id')->select('id', 'firstName', 'lastName', 'email', 'phoneNumber', 'city');
+        if($customer){
+            $users = $users->first();
+        } else{
+            $users = CustomerResource::collection($users->get());
+        }
 
-        return $users;
+        return response()->json($users);
     }
 
 
