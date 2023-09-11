@@ -24,13 +24,15 @@ class ProductController extends Controller
         //1)create new product
         $product = Product::create($request->toArray());
 
-        //2)giv product's categories via relation function
+        //2)giv product's categories
         $categories = $request->categories;
 
         //3)attaching categories for product
+        $categorySync = [];
         foreach ($categories as $category){
-            $product->categories()->attach($category);
+            $categorySync[] = $category;
         }
+            $product->categories()->attach($categorySync);
 
         return redirect()->route('productList');
     }
@@ -67,9 +69,11 @@ class ProductController extends Controller
         Product::find($id)->update($request->except(['_method', '_token']));
         $product = Product::find($id);
         $categories = $request->categories;
+        $categorySync = [];
         foreach ($categories as $category){
-            $product->categories()->attach($category);
+            $categorySync[] = $category;
         }
+            $product->categories()->sync($categorySync);
 
         return redirect()->route('productList');
     }

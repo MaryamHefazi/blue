@@ -11,48 +11,40 @@ use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
-    public function displayNewOrderPage(){
 
-        $users = Customer::select(['id' , 'firstName' , 'lastName'])->get();
-        $products = Product::select(['id' , 'productName' , 'price'])->get();
-
-        return view('orders.newOrder' , compact( 'products', 'users'));
-    }
-
-    public function addOrder(OrderRequest $request){
+    public function newOrder(OrderRequest $request){
 
         $order = Order::create($request->toArray());
         $products = $request->products;
          foreach ($products as $product){
              $order->products()->attach($product);
          }
-        return redirect()->route('ordersList');
+        return response()->json($order);
     }
 
-    public function ordersList(){
+    public function orderList(){
 
-        $order = Order::with('products')->select(['id','customer_id','description'])->get();
-        return view('orders.ordersList' , ['orders'=>$order]);
+        $order = Order::select(['id','customer_id','description'])->get();
+        return response()->json($order);
 
     }
 
-    public function deleteOrder($id){
+    public function delete($id){
         Order::destroy($id);
-        return back();
+        return response()->json([
+            'message'=>'Delete Order Successfully'
+        ]);
     }
 
-    public function displayEditOrderPage($id){
-
-        $order = Order::find($id);
-        $users = Customer::select(['id' , 'firstName' , 'lastName'])->get();
-        $products = Product::select(['id' , 'productName' , 'price'])->get();
-        $selectedProducts = $order->products()->pluck('id')->toArray();
-        return view('orders.editOrder' , compact('order', 'users' , 'products' , 'selectedProducts'));
+    public function show($id)
+    {
+        $order = Order::find($id)->get();
+        return response()->json($order);
     }
 
-    public function editOrder(OrderRequest $request , $id){
-
-        Order::find($id)->update($request->except(['_method','_token']));
-        return redirect()->route('ordersList');
+    public function update(OrderRequest $request , $id)
+    {
+       $order = Order::find($id)->update($request->toArray());
+        return response()->json($order);
     }
 }

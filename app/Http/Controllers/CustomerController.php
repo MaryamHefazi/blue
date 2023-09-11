@@ -10,18 +10,14 @@ use Illuminate\Support\Facades\Hash;
 
 class CustomerController extends Controller
 {
-    public function displayNewUserPage() {
 
-        return view('users.newUser');
+    public function newCustomer(UserRequest $request)
+    {
+        $customer = Customer::create($request->merge(['password'=>Hash::make($request->password)])->toArray());
+        return $customer;
     }
 
-    public function addUser(UserRequest $request){
-
-        Customer::create($request->merge(['password'=>Hash::make($request->password)])->toArray());
-        return redirect()->route('usersList');
-    }
-
-    public function usersList(Request $request){
+    public function customerList(Request $request){
 
         $query = Customer::query();
 
@@ -43,27 +39,29 @@ class CustomerController extends Controller
             }
         }
 
-        $users = $query->with('orders')->select('id', 'firstName', 'lastName', 'email', 'phoneNumber', 'city')->get();
+        $users = $query->select('id', 'firstName', 'lastName', 'email', 'phoneNumber', 'city')->get();
 
-//        $users = Customer:Customer:select('id','firstName','lastName','email','phoneNumber','city')->get();
-        return view('users.usersList' , ['users'=>$users]);
+        return $users;
     }
 
-    public function delete(Customer $customer){
 
+    public function show(Customer $customer)
+    {
+        return response()->json($customer);
+    }
+
+    public function delete(Customer $customer)
+    {
         $customer->delete();
-        return back();
+        return response()->json([
+            'message'=>'Delete Customer Successfully'
+        ]);
     }
 
-    public function displayEditPage(Customer $customer){
 
-        return view('users.editUser' , ['user'=>$customer]);
-    }
-
-    public function edit(UserRequest $request , Customer $customer){
-
-        $customer->update($request->except(['_method' , '_token']));
-        return redirect()->route('usersList');
-
+    public function update(UserRequest $request , Customer $customer)
+    {
+        $customer->update($request->toArray());
+        return response()->json($customer) ;
     }
 }
