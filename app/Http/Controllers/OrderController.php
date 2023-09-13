@@ -7,10 +7,15 @@ use App\Models\Customer;
 use App\Models\Order;
 use App\Models\User;
 use App\Models\Product;
+use http\Exception\InvalidArgumentException;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:sanctum');
+    }
 
     public function newOrder(OrderRequest $request){
 
@@ -19,14 +24,21 @@ class OrderController extends Controller
          foreach ($products as $product){
              $order->products()->attach($product);
          }
+
         return response()->json($order);
     }
 
-    public function orderList(){
-
-        $order = Order::select(['id','customer_id','description'])->get();
+    public function ordersList(string $id = null)
+    {
+        if ($id)
+        {
+           $order = Order::find($id);
+        }
+        else
+        {
+            $order = Order::select(['id','customer_id','description'])->get();
+        }
         return response()->json($order);
-
     }
 
     public function delete($id){
@@ -36,11 +48,6 @@ class OrderController extends Controller
         ]);
     }
 
-    public function show($id)
-    {
-        $order = Order::find($id);
-        return response()->json($order);
-    }
 
     public function update(OrderRequest $request , $id)
     {

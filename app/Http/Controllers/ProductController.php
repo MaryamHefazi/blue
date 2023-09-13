@@ -11,15 +11,13 @@ use function Symfony\Component\String\b;
 
 class ProductController extends Controller
 {
-    public function displayNewProductPage()
+    public function __construct()
     {
-
-        $categorry = Category::select(['id', 'name'])->get();
-        return view('products.newProduct', ['categories' => $categorry]);
+        $this->middleware('auth:sanctum');
     }
 
 
-    public function addProduct(ProductRequest $request)
+    public function newProduct(ProductRequest $request)
     {
         //1)create new product
         $product = Product::create($request->toArray());
@@ -34,40 +32,37 @@ class ProductController extends Controller
         }
             $product->categories()->attach($categorySync);
 
-        return redirect()->route('productList');
+        return response()->json($product);
     }
 
 
-    public function productList()
+    public function productsList(string $id = null)
     {
-
-        $product = Product::with('categories')->get();
-        return view('products.productsList', ['products' => $product]);
+        if ($id) {
+            $products = Product::find($id);
+        }
+        else {
+            $products = Product::with('categories:id,name')->get();
+        }
+        return response()->json($products);
     }
 
 
-    public function delete($id)
+    public function delete(string $id)
     {
-
         Product::destroy($id);
-        return back();
+        return response()->json([
+            'message'=>'Went To Fucking Hell!',
+            'status'=>200
+        ]);
     }
 
 
-    public function displayEditProductPage($id)
+    public function update(Request $request , string $id)
     {
-
         $product = Product::find($id);
-        $categories = Category::select(['id', 'name'])->get();
-        $selectedCategories = $product->categories()->pluck('id')->toArray();
-        return view('products.editProduct', compact('product' , 'selectedCategories' , 'categories'));
-    }
+        $product->update($request->except(['_method', '_token']));
 
-
-    public function edit(ProductRequest $request, $id)
-    {
-        Product::find($id)->update($request->except(['_method', '_token']));
-        $product = Product::find($id);
         $categories = $request->categories;
         $categorySync = [];
         foreach ($categories as $category){
@@ -75,6 +70,6 @@ class ProductController extends Controller
         }
             $product->categories()->sync($categorySync);
 
-        return redirect()->route('productList');
+        return response()->json($product);
     }
 }

@@ -7,40 +7,43 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Nette\Schema\ValidationException;
 
 class UserController extends Controller
 {
-     public function displayRegisterPage(){
 
-         return view('auth.register');
-     }
-
-    public function displayLoginPage(){
-
-        return view('auth.login');
-    }
-
-    public function login(Request $request){
-
-       $credentials = $request->validate([
-           'email' => ['required', 'email'],
-           'password' => ['required'],
+    public function login(Request $request)
+    {
+       $request->validate([
+           'email'=>'required|email',
+           'password'=>'required'
        ]);
 
-       if (Auth::attempt($credentials)){
-           $request->session()->regenerate();
+       $user = User::where('email' , $request->email)->first();
 
-           return redirect('/');
+       if(!$user) {
+           throw \Illuminate\Validation\ValidationException::withMessages([
+               'email'=>['the provided credentials incorrect!']
+           ]);
        }
-       return back()->withErrors([ 'email' => 'The provided credentials do not match our records.'])
-                    ->onlyInput('email');
+       if(!Hash::check($request->password , $user->password)) {
+           throw \Illuminate\Validation\ValidationException::withMessages([
+               'email'=>['the provided credentials incorrect!']
+           ]);
+       }
 
+       $token = $user->createToken('api-token')->plainTextToken;
+
+       return response()->json([
+           'token'=>$token
+       ]);
     }
 
-    public function logout(Request $request){
-        Auth::logout();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-        return redirect()->route('displayLoginPage');
+    public function logout(Request $request)
+    {
+       $request->user()->tokens()->delete();
+       return response()->json([
+          'message' => 'Go To Hell!'
+       ]);
     }
 }
