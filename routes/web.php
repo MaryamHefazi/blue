@@ -50,8 +50,6 @@ Route::group(['prefix => dashboard','middleware' => ['auth']],function (){
     Route::put('/editOrder/{id}' , [OrderController::class , 'editOrder'])->name('editOrder');
 
 
-
-
 });
 
 
@@ -61,7 +59,7 @@ Route::post('/register' , [UserController::class , 'register'])->name('register'
 
 Route::get('/login', [UserController::class , 'displayLoginPage'])->name('displayLoginPage');
 Route::post('/login' , [UserController::class , 'login'])->name('login');
-Route::get('logout' , [UserController::class , 'logout'])->name('logout');
 
+Route::get('logout' , [UserController::class , 'logout'])->name('logout');
 
 

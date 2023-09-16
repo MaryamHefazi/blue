@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UserRequest;
+use App\Models\Customer;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -13,6 +14,13 @@ class UserController extends Controller
      public function displayRegisterPage(){
 
          return view('auth.register');
+     }
+
+     public function register(Request $request)
+     {
+        $user = User::create($request->toArray());
+        Auth::login($user);
+         return redirect('/');
      }
 
     public function displayLoginPage(){
@@ -43,4 +51,5 @@ class UserController extends Controller
         $request->session()->regenerateToken();
         return redirect()->route('displayLoginPage');
     }
+
 }

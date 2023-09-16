@@ -12,6 +12,7 @@
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
 </head>
 <body class="sb-nav-fixed">
+
 <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
     <!-- Navbar Brand-->
     <a class="navbar-brand ps-3" href="index.html">Admin Panel</a>
@@ -161,6 +162,13 @@
     </div>
     <div id="layoutSidenav_content">
         <main> <br><br>
+
+            <div class="container">
+                @if(session('MustVerifyEmail'))
+                    <div class="alert alert-danger" >You must verified email</div>
+                @endif
+            </div>
+
             @yield('main')
         </main>
         <footer class="py-4 bg-light mt-auto">

@@ -23,20 +23,11 @@
 
                                 <form action="{{route('register')}}" method="post">
                                     @csrf
-                                    <div class="row mb-3">
-                                        <div class="col-md-6">
-                                            <div class="form-floating mb-3 mb-md-0">
-                                                <input class="form-control" name="firstName" type="text" placeholder="Enter your first name">
-                                                <label for="inputFirstName">First name</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-floating">
-                                                <input class="form-control" name="lastName" type="text" placeholder="Enter your last name">
-                                                <label for="inputLastName">Last name</label>
-                                            </div>
-                                        </div>
+                                    <div class="form-floating mb-3">
+                                        <input class="form-control" name="name" type="text" placeholder="name" >
+                                        <label for="name">Name</label>
                                     </div>
+
                                     <div class="form-floating mb-3">
                                         <input class="form-control" name="email" type="email" placeholder="name@example.com" />
                                         <label for="email">Email address</label>
