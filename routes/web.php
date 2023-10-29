@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\FactureController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\PayController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\UserController;
@@ -49,6 +51,14 @@ Route::group(['prefix => dashboard','middleware' => ['auth']],function (){
     Route::get('/editOrder/{id}' , [OrderController::class , 'displayEditOrderPage'])->name('displayEditOrderPage');
     Route::put('/editOrder/{id}' , [OrderController::class , 'editOrder'])->name('editOrder');
 
+
+    //FACTURE 
+    Route::get('/newFacture/{id}' , [FactureController::class , 'displayFactore'])->name('displayFactore');
+
+
+    //PAY
+    Route::post('/pay' , [PayController::class , 'pay'])->name('pay');
+    Route::get('callBack' , [PayController::class , 'callBack'])->name('callBack');
 
 });
 

@@ -20,7 +20,7 @@ class OrderFactory extends Factory
     {
         return [
             'customer_id'=>Customer::factory(),
-            'description'=>fake()->paragraph(rand(1,3))
+            'description'=>fake()->paragraph(1),
         ];
     }
 }

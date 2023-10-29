@@ -163,11 +163,11 @@
     <div id="layoutSidenav_content">
         <main> <br><br>
 
-            <div class="container">
+            <!-- <div class="container">
                 @if(session('MustVerifyEmail'))
                     <div class="alert alert-danger" >You must verified email</div>
                 @endif
-            </div>
+            </div> -->
 
             @yield('main')
         </main>

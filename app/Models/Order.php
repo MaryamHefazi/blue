@@ -22,4 +22,9 @@ class Order extends Model
 
         return $this->belongsToMany('App\Models\Product');
     }
+
+    public function facture()
+    {
+        return $this->hasOne(Facture::class);
+    }
 }

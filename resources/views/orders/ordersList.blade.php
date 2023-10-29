@@ -8,7 +8,7 @@
         <div class="card mb-4">
             <div class="card-header">
                 <i class="fas fa-table me-1"></i>
-                Product Table
+                Order Table
             </div>
             <div class="card-body">
                 <table id="datatablesSimple">
@@ -29,6 +29,7 @@
                             <td>{{$order->description}}</td>
                             <td>
                                 <a href="{{route('displayEditOrderPage' , ['id'=>$order->id])}}" class="btn btn-primary">Edit</a>
+                                <a href="{{route('displayFactore' , ['id'=>$order->id])}}" class="btn btn-success">Facture</a>
                                 <a href="{{route('deleteOrder' , ['id'=>$order->id])}}" class="btn btn-danger" onclick="confirm('Are you sure?')">Delete</a>
                             </td>
                         </tr>
